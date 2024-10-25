@@ -68,14 +68,19 @@ void add_token(const char* token_value, const char* token_type) {
     add_token(yytext, "ASSIGNMENT");
 };
 
-"+" { a++; x = 1; }
-"-" { b++; y = 1; }
-"*" { c++; z = 1; }
-"/" { d++; p = 1; }
+"+" { a++; x = 1; add_token(yytext, "PLUS"); }
+"-" { b++; y = 1; add_token(yytext, "MINUS"); }
+"*" { c++; z = 1; add_token(yytext, "MULTIPLY"); }
+"/" { d++; p = 1; add_token(yytext, "DIVIDE"); }
 
 [a-zA-Z_][a-zA-Z0-9_]* {
     printf("\n%s is an Identifier ", yytext);
     add_token(yytext, "IDENTIFIER");
+}
+
+\"[^"]*\" {
+    printf("\n%s is a String Literal", yytext);
+    add_token(yytext, "STRING_LITERAL");
 }
 
 ";" {

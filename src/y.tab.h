@@ -56,11 +56,12 @@ extern int yydebug;
     YYUNDEF = 257,                 /* "invalid token"  */
     INTEGER = 258,                 /* INTEGER  */
     IDENTIFIER = 259,              /* IDENTIFIER  */
-    ASSIGN = 260,                  /* ASSIGN  */
-    PLUS = 261,                    /* PLUS  */
-    INPUT = 262,                   /* INPUT  */
-    OUTPUT = 263,                  /* OUTPUT  */
-    SEMICOLON = 264                /* SEMICOLON  */
+    STRING_LITERAL = 260,          /* STRING_LITERAL  */
+    ASSIGN = 261,                  /* ASSIGN  */
+    PLUS = 262,                    /* PLUS  */
+    INPUT = 263,                   /* INPUT  */
+    OUTPUT = 264,                  /* OUTPUT  */
+    SEMICOLON = 265                /* SEMICOLON  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -75,7 +76,7 @@ union YYSTYPE
     char* sval;
     ASTNode* node;
 
-#line 79 "src/y.tab.h"
+#line 80 "src/y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

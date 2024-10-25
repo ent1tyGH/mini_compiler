@@ -113,20 +113,24 @@ enum yysymbol_kind_t
   YYSYMBOL_YYUNDEF = 2,                    /* "invalid token"  */
   YYSYMBOL_INTEGER = 3,                    /* INTEGER  */
   YYSYMBOL_IDENTIFIER = 4,                 /* IDENTIFIER  */
-  YYSYMBOL_ASSIGN = 5,                     /* ASSIGN  */
-  YYSYMBOL_PLUS = 6,                       /* PLUS  */
-  YYSYMBOL_INPUT = 7,                      /* INPUT  */
-  YYSYMBOL_OUTPUT = 8,                     /* OUTPUT  */
-  YYSYMBOL_SEMICOLON = 9,                  /* SEMICOLON  */
-  YYSYMBOL_YYACCEPT = 10,                  /* $accept  */
-  YYSYMBOL_program = 11,                   /* program  */
-  YYSYMBOL_statement_list = 12,            /* statement_list  */
-  YYSYMBOL_statement = 13,                 /* statement  */
-  YYSYMBOL_declaration_statement = 14,     /* declaration_statement  */
-  YYSYMBOL_initialization_statement = 15,  /* initialization_statement  */
-  YYSYMBOL_input_statement = 16,           /* input_statement  */
-  YYSYMBOL_output_statement = 17,          /* output_statement  */
-  YYSYMBOL_addition_statement = 18         /* addition_statement  */
+  YYSYMBOL_STRING_LITERAL = 5,             /* STRING_LITERAL  */
+  YYSYMBOL_ASSIGN = 6,                     /* ASSIGN  */
+  YYSYMBOL_PLUS = 7,                       /* PLUS  */
+  YYSYMBOL_INPUT = 8,                      /* INPUT  */
+  YYSYMBOL_OUTPUT = 9,                     /* OUTPUT  */
+  YYSYMBOL_SEMICOLON = 10,                 /* SEMICOLON  */
+  YYSYMBOL_YYACCEPT = 11,                  /* $accept  */
+  YYSYMBOL_program = 12,                   /* program  */
+  YYSYMBOL_statement_list = 13,            /* statement_list  */
+  YYSYMBOL_statement = 14,                 /* statement  */
+  YYSYMBOL_declaration_statement = 15,     /* declaration_statement  */
+  YYSYMBOL_initialization_statement = 16,  /* initialization_statement  */
+  YYSYMBOL_input_statement = 17,           /* input_statement  */
+  YYSYMBOL_output_statement = 18,          /* output_statement  */
+  YYSYMBOL_addition_statement = 19,        /* addition_statement  */
+  YYSYMBOL_expression = 20,                /* expression  */
+  YYSYMBOL_cin_statement = 21,             /* cin_statement  */
+  YYSYMBOL_cout_statement = 22             /* cout_statement  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -452,21 +456,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  16
+#define YYFINAL  21
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   17
+#define YYLAST   28
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  10
+#define YYNTOKENS  11
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  9
+#define YYNNTS  12
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  14
+#define YYNRULES  23
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  26
+#define YYNSTATES  37
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   264
+#define YYMAXUTOK   265
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -506,15 +510,16 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9
+       5,     6,     7,     8,     9,    10
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_int8 yyrline[] =
+static const yytype_uint8 yyrline[] =
 {
        0,    32,    32,    40,    45,    53,    57,    61,    65,    69,
-      76,    83,    94,   101,   108
+      73,    77,    84,    91,   102,   106,   114,   119,   126,   134,
+     138,   144,   153,   160
 };
 #endif
 
@@ -531,10 +536,11 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
 static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "INTEGER",
-  "IDENTIFIER", "ASSIGN", "PLUS", "INPUT", "OUTPUT", "SEMICOLON",
-  "$accept", "program", "statement_list", "statement",
+  "IDENTIFIER", "STRING_LITERAL", "ASSIGN", "PLUS", "INPUT", "OUTPUT",
+  "SEMICOLON", "$accept", "program", "statement_list", "statement",
   "declaration_statement", "initialization_statement", "input_statement",
-  "output_statement", "addition_statement", YY_NULLPTR
+  "output_statement", "addition_statement", "expression", "cin_statement",
+  "cout_statement", YY_NULLPTR
 };
 
 static const char *
@@ -544,7 +550,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-9)
+#define YYPACT_NINF (-15)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -558,9 +564,10 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -4,    -3,     1,     5,    10,    -4,    -9,    -9,    -9,    -9,
-      -9,    -9,     4,    -9,    -8,     2,    -9,    -9,     3,     7,
-      -9,    -9,    -9,    11,     8,    -9
+      -3,    -2,     7,    10,    18,    -3,   -15,   -15,   -15,   -15,
+     -15,   -15,   -15,   -15,    -1,   -15,     9,   -15,    12,    13,
+       0,   -15,   -15,    14,   -15,     2,    21,   -15,   -15,   -15,
+      17,   -15,   -15,   -15,    16,    20,   -15
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -569,20 +576,23 @@ static const yytype_int8 yypact[] =
 static const yytype_int8 yydefact[] =
 {
        0,     0,     0,     0,     0,     2,     3,     5,     6,     7,
-       8,     9,     0,    10,     0,     0,     1,     4,     0,     0,
-      12,    13,    11,     0,     0,    14
+       8,     9,    10,    11,     0,    12,     0,    20,    19,     0,
+       0,     1,     4,    20,    19,     0,     0,    14,    23,    17,
+       0,    16,    13,    18,     0,    21,    15
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -9,    -9,    -9,     9,    -9,    -9,    -9,    -9,    -9
+     -15,   -15,   -15,    23,   -15,   -15,   -15,   -15,   -15,   -14,
+     -15,   -15
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     4,     5,     6,     7,     8,     9,    10,    11
+       0,     4,     5,     6,     7,     8,     9,    10,    11,    20,
+      12,    13
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -590,37 +600,42 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       1,    20,    12,     2,     3,    14,    13,    18,    19,    15,
-      16,    21,    22,    23,    17,    24,     0,    25
+      25,     1,    23,    24,    14,     2,     3,    30,    15,    30,
+      31,    16,    33,    17,    18,    19,    35,    26,    21,    27,
+      17,    24,    28,    29,    32,    34,    36,    30,    22
 };
 
 static const yytype_int8 yycheck[] =
 {
-       4,     9,     5,     7,     8,     4,     9,     3,     4,     4,
-       0,     9,     9,     6,     5,     4,    -1,     9
+      14,     4,     3,     4,     6,     8,     9,     7,    10,     7,
+      10,     4,    10,     3,     4,     5,    30,     8,     0,    10,
+       3,     4,    10,    10,    10,     4,    10,     7,     5
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     4,     7,     8,    11,    12,    13,    14,    15,    16,
-      17,    18,     5,     9,     4,     4,     0,    13,     3,     4,
-       9,     9,     9,     6,     4,     9
+       0,     4,     8,     9,    12,    13,    14,    15,    16,    17,
+      18,    19,    21,    22,     6,    10,     4,     3,     4,     5,
+      20,     0,    14,     3,     4,    20,     8,    10,    10,    10,
+       7,    10,    10,    10,     4,    20,    10
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    10,    11,    12,    12,    13,    13,    13,    13,    13,
-      14,    15,    16,    17,    18
+       0,    11,    12,    13,    13,    14,    14,    14,    14,    14,
+      14,    14,    15,    16,    17,    17,    18,    18,    19,    20,
+      20,    20,    21,    22
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
        0,     2,     1,     1,     2,     1,     1,     1,     1,     1,
-       2,     4,     3,     3,     6
+       1,     1,     2,     4,     3,     5,     3,     3,     4,     1,
+       1,     3,     3,     3
 };
 
 
@@ -1089,7 +1104,7 @@ yyreduce:
         (yyval.node) = (yyvsp[0].node);
         rootNode = (yyval.node);  // Set rootNode to the root of the AST
     }
-#line 1093 "src/y.tab.c"
+#line 1108 "src/y.tab.c"
     break;
 
   case 3: /* statement_list: statement  */
@@ -1098,7 +1113,7 @@ yyreduce:
         (yyval.node) = createNode("statement_list", NULL);  // Create new AST node for statement_list
         addChild((yyval.node), (yyvsp[0].node));  // Add the statement node as a child
     }
-#line 1102 "src/y.tab.c"
+#line 1117 "src/y.tab.c"
     break;
 
   case 4: /* statement_list: statement_list statement  */
@@ -1107,7 +1122,7 @@ yyreduce:
         addChild((yyvsp[-1].node), (yyvsp[0].node));  // Add the new statement as a child
         (yyval.node) = (yyvsp[-1].node);  // Return the existing statement list
     }
-#line 1111 "src/y.tab.c"
+#line 1126 "src/y.tab.c"
     break;
 
   case 5: /* statement: declaration_statement  */
@@ -1115,7 +1130,7 @@ yyreduce:
     {
         (yyval.node) = (yyvsp[0].node);  // Forward the declaration statement node
     }
-#line 1119 "src/y.tab.c"
+#line 1134 "src/y.tab.c"
     break;
 
   case 6: /* statement: initialization_statement  */
@@ -1123,7 +1138,7 @@ yyreduce:
     {
         (yyval.node) = (yyvsp[0].node);  // Forward the initialization statement node
     }
-#line 1127 "src/y.tab.c"
+#line 1142 "src/y.tab.c"
     break;
 
   case 7: /* statement: input_statement  */
@@ -1131,7 +1146,7 @@ yyreduce:
     {
         (yyval.node) = (yyvsp[0].node);  // Forward the input statement node
     }
-#line 1135 "src/y.tab.c"
+#line 1150 "src/y.tab.c"
     break;
 
   case 8: /* statement: output_statement  */
@@ -1139,7 +1154,7 @@ yyreduce:
     {
         (yyval.node) = (yyvsp[0].node);  // Forward the output statement node
     }
-#line 1143 "src/y.tab.c"
+#line 1158 "src/y.tab.c"
     break;
 
   case 9: /* statement: addition_statement  */
@@ -1147,19 +1162,35 @@ yyreduce:
     {
         (yyval.node) = (yyvsp[0].node);  // Forward the addition statement node
     }
-#line 1151 "src/y.tab.c"
+#line 1166 "src/y.tab.c"
     break;
 
-  case 10: /* declaration_statement: IDENTIFIER SEMICOLON  */
-#line 77 "src/parser.y"
+  case 10: /* statement: cin_statement  */
+#line 74 "src/parser.y"
+    {
+        (yyval.node) = (yyvsp[0].node);  // Forward the cin statement node
+    }
+#line 1174 "src/y.tab.c"
+    break;
+
+  case 11: /* statement: cout_statement  */
+#line 78 "src/parser.y"
+    {
+        (yyval.node) = (yyvsp[0].node);  // Forward the cout statement node
+    }
+#line 1182 "src/y.tab.c"
+    break;
+
+  case 12: /* declaration_statement: IDENTIFIER SEMICOLON  */
+#line 85 "src/parser.y"
     {
         (yyval.node) = createNode("declaration", (yyvsp[-1].sval));  // Create a declaration node with the identifier
     }
-#line 1159 "src/y.tab.c"
+#line 1190 "src/y.tab.c"
     break;
 
-  case 11: /* initialization_statement: IDENTIFIER ASSIGN INTEGER SEMICOLON  */
-#line 84 "src/parser.y"
+  case 13: /* initialization_statement: IDENTIFIER ASSIGN INTEGER SEMICOLON  */
+#line 92 "src/parser.y"
     {
         // Create initialization node and add the integer value as a child
         (yyval.node) = createNode("initialization", (yyvsp[-3].sval));
@@ -1167,37 +1198,98 @@ yyreduce:
         snprintf(buffer, 12, "%d", (yyvsp[-1].ival));  // Convert integer to string
         addChild((yyval.node), createNode("integer", buffer));
     }
-#line 1171 "src/y.tab.c"
+#line 1202 "src/y.tab.c"
     break;
 
-  case 12: /* input_statement: INPUT IDENTIFIER SEMICOLON  */
-#line 95 "src/parser.y"
+  case 14: /* input_statement: INPUT IDENTIFIER SEMICOLON  */
+#line 103 "src/parser.y"
     {
         (yyval.node) = createNode("input", (yyvsp[-1].sval));  // Create input node with the identifier
     }
-#line 1179 "src/y.tab.c"
+#line 1210 "src/y.tab.c"
     break;
 
-  case 13: /* output_statement: OUTPUT IDENTIFIER SEMICOLON  */
-#line 102 "src/parser.y"
+  case 15: /* input_statement: INPUT IDENTIFIER INPUT IDENTIFIER SEMICOLON  */
+#line 107 "src/parser.y"
     {
-        (yyval.node) = createNode("output", (yyvsp[-1].sval));  // Create output node with the identifier
+        (yyval.node) = createNode("input", (yyvsp[-3].sval));  // Create input node with the first identifier
+        addChild((yyval.node), createNode("identifier", (yyvsp[-1].sval)));  // Add the second identifier as a child
     }
-#line 1187 "src/y.tab.c"
+#line 1219 "src/y.tab.c"
     break;
 
-  case 14: /* addition_statement: IDENTIFIER ASSIGN IDENTIFIER PLUS IDENTIFIER SEMICOLON  */
-#line 109 "src/parser.y"
+  case 16: /* output_statement: OUTPUT expression SEMICOLON  */
+#line 115 "src/parser.y"
     {
-        (yyval.node) = createNode("addition", (yyvsp[-5].sval));  // Create addition node with the left-hand identifier
-        addChild((yyval.node), createNode("identifier", (yyvsp[-3].sval)));  // Add first operand identifier as a child
-        addChild((yyval.node), createNode("identifier", (yyvsp[-1].sval)));  // Add second operand identifier as a child
+        (yyval.node) = createNode("output", NULL);  // Create output node
+        addChild((yyval.node), (yyvsp[-1].node));  // Add the expression or identifier as a child
     }
-#line 1197 "src/y.tab.c"
+#line 1228 "src/y.tab.c"
+    break;
+
+  case 17: /* output_statement: OUTPUT STRING_LITERAL SEMICOLON  */
+#line 120 "src/parser.y"
+    {
+        (yyval.node) = createNode("output", (yyvsp[-1].sval));  // Create output node with the string literal
+    }
+#line 1236 "src/y.tab.c"
+    break;
+
+  case 18: /* addition_statement: IDENTIFIER ASSIGN expression SEMICOLON  */
+#line 127 "src/parser.y"
+    {
+        (yyval.node) = createNode("addition", (yyvsp[-3].sval));  // Create addition node with the left-hand identifier
+        addChild((yyval.node), (yyvsp[-1].node));  // Add the expression as a child
+    }
+#line 1245 "src/y.tab.c"
+    break;
+
+  case 19: /* expression: IDENTIFIER  */
+#line 135 "src/parser.y"
+    {
+        (yyval.node) = createNode("identifier", (yyvsp[0].sval));  // Return identifier as node
+    }
+#line 1253 "src/y.tab.c"
+    break;
+
+  case 20: /* expression: INTEGER  */
+#line 139 "src/parser.y"
+    {
+        char buffer[12];
+        snprintf(buffer, 12, "%d", (yyvsp[0].ival));  // Convert integer to string
+        (yyval.node) = createNode("integer", buffer);  // Return integer as node
+    }
+#line 1263 "src/y.tab.c"
+    break;
+
+  case 21: /* expression: expression PLUS expression  */
+#line 145 "src/parser.y"
+    {
+        (yyval.node) = createNode("addition", NULL);  // Create an addition node for expression
+        addChild((yyval.node), (yyvsp[-2].node));  // Add the left operand
+        addChild((yyval.node), (yyvsp[0].node));  // Add the right operand
+    }
+#line 1273 "src/y.tab.c"
+    break;
+
+  case 22: /* cin_statement: INPUT IDENTIFIER SEMICOLON  */
+#line 154 "src/parser.y"
+    {
+        (yyval.node) = createNode("cin", (yyvsp[-1].sval));  // Create node for cin operation with the identifier
+    }
+#line 1281 "src/y.tab.c"
+    break;
+
+  case 23: /* cout_statement: OUTPUT IDENTIFIER SEMICOLON  */
+#line 161 "src/parser.y"
+    {
+        (yyval.node) = createNode("cout", (yyvsp[-1].sval));  // Create node for cout operation with the identifier
+    }
+#line 1289 "src/y.tab.c"
     break;
 
 
-#line 1201 "src/y.tab.c"
+#line 1293 "src/y.tab.c"
 
       default: break;
     }
@@ -1390,11 +1482,10 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 116 "src/parser.y"
+#line 166 "src/parser.y"
 
 
 // Error handling function
 void yyerror(const char *s) {
     fprintf(stderr, "Error: %s\n", s);
 }
-

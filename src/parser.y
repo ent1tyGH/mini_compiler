@@ -13,7 +13,7 @@ void yyerror(const char *s);
 
 // Token declarations with types
 %token <ival> INTEGER
-%token <sval> IDENTIFIER
+%token <sval> IDENTIFIER STRING_LITERAL
 %token ASSIGN PLUS INPUT OUTPUT SEMICOLON
 
 // Define the union to handle multiple data types
@@ -24,7 +24,7 @@ void yyerror(const char *s);
 }
 
 // Define the type for the parser rules
-%type <node> program statement_list statement declaration_statement initialization_statement input_statement output_statement addition_statement
+%type <node> program statement_list statement declaration_statement initialization_statement input_statement output_statement addition_statement expression cin_statement cout_statement
 
 %%
 
@@ -70,6 +70,14 @@ statement:
     {
         $$ = $1;  // Forward the addition statement node
     }
+    | cin_statement
+    {
+        $$ = $1;  // Forward the cin statement node
+    }
+    | cout_statement
+    {
+        $$ = $1;  // Forward the cout statement node
+    }
     ;
 
 declaration_statement:
@@ -95,21 +103,63 @@ input_statement:
     {
         $$ = createNode("input", $2);  // Create input node with the identifier
     }
+    | INPUT IDENTIFIER INPUT IDENTIFIER SEMICOLON
+    {
+        $$ = createNode("input", $2);  // Create input node with the first identifier
+        addChild($$, createNode("identifier", $4));  // Add the second identifier as a child
+    }
     ;
 
 output_statement:
-    OUTPUT IDENTIFIER SEMICOLON
+    OUTPUT expression SEMICOLON
     {
-        $$ = createNode("output", $2);  // Create output node with the identifier
+        $$ = createNode("output", NULL);  // Create output node
+        addChild($$, $2);  // Add the expression or identifier as a child
+    }
+    | OUTPUT STRING_LITERAL SEMICOLON
+    {
+        $$ = createNode("output", $2);  // Create output node with the string literal
     }
     ;
 
 addition_statement:
-    IDENTIFIER ASSIGN IDENTIFIER PLUS IDENTIFIER SEMICOLON
+    IDENTIFIER ASSIGN expression SEMICOLON
     {
         $$ = createNode("addition", $1);  // Create addition node with the left-hand identifier
-        addChild($$, createNode("identifier", $3));  // Add first operand identifier as a child
-        addChild($$, createNode("identifier", $5));  // Add second operand identifier as a child
+        addChild($$, $3);  // Add the expression as a child
+    }
+    ;
+
+expression:
+    IDENTIFIER
+    {
+        $$ = createNode("identifier", $1);  // Return identifier as node
+    }
+    | INTEGER
+    {
+        char buffer[12];
+        snprintf(buffer, 12, "%d", $1);  // Convert integer to string
+        $$ = createNode("integer", buffer);  // Return integer as node
+    }
+    | expression PLUS expression
+    {
+        $$ = createNode("addition", NULL);  // Create an addition node for expression
+        addChild($$, $1);  // Add the left operand
+        addChild($$, $3);  // Add the right operand
+    }
+    ;
+
+cin_statement:
+    INPUT IDENTIFIER SEMICOLON
+    {
+        $$ = createNode("cin", $2);  // Create node for cin operation with the identifier
+    }
+    ;
+
+cout_statement:
+    OUTPUT IDENTIFIER SEMICOLON
+    {
+        $$ = createNode("cout", $2);  // Create node for cout operation with the identifier
     }
     ;
 
@@ -119,4 +169,3 @@ addition_statement:
 void yyerror(const char *s) {
     fprintf(stderr, "Error: %s\n", s);
 }
-
